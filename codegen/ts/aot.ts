@@ -121,7 +121,7 @@ export async function yamlToBundleConfig(
       );
       return {
         schema,
-        messages: { outDir: (unit["messages-dir"] ?? "messages").trim() },
+        messages: { outDir: (unit["messages-dir"] ?? "messages").trim(), jsonNameAsFieldName: false },
         services: { outDir: (unit["services-dir"] ?? "services").trim() },
       };
     })),

@@ -153,6 +153,7 @@ export type RuntimeConfig =
   | { type: "packageName"; packageName: string };
 export interface GenMessagesConfig {
   outDir: string;
+  jsonNameAsFieldName: boolean;
 }
 export interface GenServicesConfig {
   outDir: string;

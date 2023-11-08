@@ -201,7 +201,7 @@ function* genMessage({
   );
   const everyFieldNames = new Map(
     schemaFields.map(
-      ([fieldNumber, { name }]) => [+fieldNumber, snakeToCamel(name)],
+      ([fieldNumber, field]) => [+fieldNumber, messages.jsonNameAsFieldName ? getJsonName(field) : snakeToCamel(field.name)],
     ),
   );
   const oneofFieldTable: { [oneof: string]: OneofField } = {};
@@ -244,8 +244,8 @@ function* genMessage({
     return {
       schema: field,
       fieldNumber: +fieldNumber,
-      tsName: snakeToCamel(field.name),
-      jsonName: field.options['json_name']?.toString() ?? snakeToCamel(field.name),
+      tsName: messages.jsonNameAsFieldName ? getJsonName(field) : snakeToCamel(field.name),
+      jsonName: getJsonName(field),
       tsType: getFieldTypeCode(field),
       isEnum: getFieldValueIsEnum(field),
       default: getFieldDefaultCode(field),
@@ -285,6 +285,10 @@ function* genMessage({
       here: filePath,
       typePath,
     });
+  }
+  function getJsonName(field: schema.MessageField): string {
+    const jsonNameValue = field.options['json_name'];
+    return typeof jsonNameValue === 'string' ? jsonNameValue : snakeToCamel(field.name);
   }
 }
 

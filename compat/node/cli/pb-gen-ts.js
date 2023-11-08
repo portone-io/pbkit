@@ -23,6 +23,7 @@ async function run() {
     outDir,
     indexFilename,
     extInImport,
+    jsonNameAsFieldName,
   } = getCliArgs();
   const {
     default: gen,
@@ -41,7 +42,7 @@ async function run() {
     runtime: runtimePackage
       ? { type: "packageName", packageName: runtimePackage.trim() }
       : { type: "outDir", outDir: runtimeDir.trim() },
-    messages: { outDir: messagesDir.trim() },
+    messages: { outDir: messagesDir.trim(), jsonNameAsFieldName: jsonNameAsFieldName ?? false },
     services: { outDir: servicesDir.trim() },
   };
   await save(
@@ -76,6 +77,7 @@ function getCliArgs() {
       "services-dir": "services",
       "out-dir": "out",
       "ext-in-import": "",
+      "json-name-as-field-name": true
     },
   });
   const wraparr = (value) => (
@@ -92,5 +94,6 @@ function getCliArgs() {
     outDir: argv["out-dir"],
     indexFilename: argv["index-filename"],
     extInImport: argv["ext-in-import"],
+    jsonNameAsFieldName: argv["json-name-as-field-name"],
   };
 }

@@ -22,6 +22,7 @@ interface Options {
   outDir: string;
   indexFilename: string;
   extInImport: string;
+  jsonNameAsFieldName?: true | undefined;
 }
 
 export default new Command()
@@ -70,6 +71,9 @@ export default new Command()
     "Specify the file extension in import statement.",
     { default: ".ts" },
   )
+  .option(
+    "--json-name-as-field-name", "Use json_name value as the field name."
+  )
   .description("Generate typescript library.")
   .action(async (options: Options, ...protoFiles: string[]) => {
     const entryPaths = options.entryPath ?? [];
@@ -83,12 +87,13 @@ export default new Command()
     const schema = await build({ loader, files });
     const indexFilename = options.indexFilename;
     const extInImport = options.extInImport;
+    const jsonNameAsFieldName = options.jsonNameAsFieldName;
     const genConfig: GenConfig = {
       indexFilename,
       runtime: options.runtimePackage
         ? { type: "packageName", packageName: options.runtimePackage.trim() }
         : { type: "outDir", outDir: options.runtimeDir.trim() },
-      messages: { outDir: options.messagesDir.trim() },
+      messages: { outDir: options.messagesDir.trim(), jsonNameAsFieldName: jsonNameAsFieldName ?? false },
       services: { outDir: options.servicesDir.trim() },
     };
     await save(
